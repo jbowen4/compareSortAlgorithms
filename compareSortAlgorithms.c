@@ -1,6 +1,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 int extraMemoryAllocated;
 
@@ -26,38 +27,154 @@ size_t Size(void* ptr)
 	return ((size_t*)ptr)[-1];
 }
 
+void swap(int* a, int* b)
+{
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+void heapify(int arr[], int N, int i)
+{
+    int largest = i;
+    int left = 2 * i + 1;
+    int right = 2 * i + 2;
+    if (left < N && arr[left] > arr[largest])
+        largest = left;
+    if (right < N && arr[right] > arr[largest])
+        largest = right;
+    if (largest != i) {
+        swap(&arr[i], &arr[largest]);
+        heapify(arr, N, largest);
+    }
+}
+
 // implements heap sort
 // extraMemoryAllocated counts bytes of memory allocated
 void heapSort(int arr[], int n)
 {
+    for (int i = n / 2 - 1; i >= 0; i--)
+        heapify(arr, n, i);
+    for (int i = n - 1; i > 0; i--) {
+        swap(&arr[0], &arr[i]);
+        heapify(arr, i, 0);
+    }
+}
+
+void merge(int pData[], int start, int mid, int end)
+{
+	int length = (end - start) + 1;
+	int* temp = Alloc(sizeof(int)* length);
+
+	int left = start;
+	int right = mid;
+	int i = 0;
+	while (left < mid && right <= end) {
+		if (pData[left] < pData[right])
+			temp[i++] = pData[left++];
+		else 
+			temp[i++] = pData[right++];
+	}
+
+	while (left < mid)
+		temp[i++] = pData[left++];
+
+	while (right <= end)
+		temp[i++] = pData[right++];
+
+	for (int i = start; i <= end; i++)
+		pData[i] = temp[i - start];
+
+	DeAlloc(temp);
 }
 
 // implement merge sort
 // extraMemoryAllocated counts bytes of extra memory allocated
 void mergeSort(int pData[], int l, int r)
 {
-	
+	if (l < r) {
+		int mid = (l + r) / 2;
+		mergeSort(pData, l, mid);
+		mergeSort(pData, mid+1, r);
+		merge(pData, l, mid+1, r);
+	}
 }
 
 // implement insertion sort
 // extraMemoryAllocated counts bytes of memory allocated
 void insertionSort(int* pData, int n)
 {
-	
+	int temp;
+	for (int i = 1; i < n; i++) {
+		for (int j = i; j < 1; j--) {
+			if (pData[j] < pData[j-1]) {
+				temp = pData[i];
+				pData[i] = pData[i+1];
+				pData[i+1] = temp;
+			}
+		}
+	}
 }
 
 // implement bubble sort
 // extraMemoryAllocated counts bytes of extra memory allocated
 void bubbleSort(int* pData, int n)
 {
-	
+	int temp;
+	for (int i=0; i < n; i++) {
+		for (int j=0; j < (n-i-1); j++){
+			if (pData[j] > pData[j+1]) {
+				temp = pData[j];
+				pData[j] = pData[j+1];
+				pData[j+1] = temp;
+			}
+		}
+	}
 }
 
 // implement selection sort
 // extraMemoryAllocated counts bytes of extra memory allocated
 void selectionSort(int* pData, int n)
 {
-	
+	// int startIdx = 0;
+	// while (startIdx < n) {
+	// 	int minIdx = startIdx;
+	// 	for (int i = startIdx; i < n; i++){
+	// 		if (pData[i] < pData[minIdx])
+	// 			minIdx = i;
+	// 	}
+	// 	if (startIdx != minIdx) {
+	// 		int temp = pData[startIdx];
+	// 		pData[startIdx] = pData[minIdx];
+	// 		pData[minIdx] = temp;
+	// 	}
+	// 	startIdx++;
+	// }
+
+	// int i, j, min_idx, temp;
+	// for (i = 0; i < n-1; i++)
+	// {
+	// 	printf("\nIteration# %d\n",i+1);
+	// 	min_idx = i;
+	// 	for (j = i+1; j < n; j++)
+	// 		if (pData[j] < pData[min_idx])
+	// 			min_idx = j;
+	// 	temp = pData[i];
+	// 	pData[i] = pData[min_idx];
+	// 	pData[min_idx] = temp;
+	// }
+	for (int i = 0; i < n - 1; i++) {
+		int minIndex = i;
+		for (int j = i + 1; j < n; j++) {
+			if (pData[j] < pData[minIndex])
+				minIndex = j;
+		}
+		if (minIndex != i) {
+			int temp = pData[i];
+			pData[i] = pData[minIndex];
+			pData[minIndex] = temp;
+		}
+	}
 }
 
 // parses input file to an integer array
@@ -160,11 +277,11 @@ int main(void)
 		printf("\textra memory allocated\t: %d\n",extraMemoryAllocated);
 		printArray(pDataCopy, dataSz);
 
-                printf("Heap Sort:\n");
+    printf("Heap Sort:\n");
 		memcpy(pDataCopy, pDataSrc, dataSz*sizeof(int));
 		extraMemoryAllocated = 0;
 		start = clock();
-		heapSort(pDataCopy, 0, dataSz - 1);
+		//heapSort(pDataCopy, 0, dataSz - 1);
 		end = clock();
 		cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
 		printf("\truntime\t\t\t: %.1lf\n",cpu_time_used);
