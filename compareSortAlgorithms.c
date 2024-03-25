@@ -34,18 +34,18 @@ void swap(int* a, int* b)
     *b = temp;
 }
 
-void heapify(int arr[], int N, int i)
+void heapify(int arr[], int n, int i)
 {
-    int largest = i;
+    int max = i;
     int left = 2 * i + 1;
     int right = 2 * i + 2;
-    if (left < N && arr[left] > arr[largest])
-        largest = left;
-    if (right < N && arr[right] > arr[largest])
-        largest = right;
-    if (largest != i) {
-        swap(&arr[i], &arr[largest]);
-        heapify(arr, N, largest);
+    if (left < n && arr[left] > arr[max])
+        max = left;
+    if (right < n && arr[right] > arr[max])
+        max = right;
+    if (max != i) {
+        swap(&arr[i], &arr[max]);
+        heapify(arr, n, max);
     }
 }
 
@@ -104,24 +104,10 @@ void mergeSort(int pData[], int l, int r)
 // extraMemoryAllocated counts bytes of memory allocated
 void insertionSort(int* pData, int n)
 {
-	// int temp;
-	// for (int i = 1; i < n; i++) {
-	// 	for (int j = i; j < 1; j--) {
-	// 		if (pData[j] < pData[j-1]) {
-	// 			temp = pData[i];
-	// 			pData[i] = pData[i+1];
-	// 			pData[i+1] = temp;
-	// 		}
-	// 	}
-	// }
-
 	int i, item, j;
 	for (i = 1; i < n; i++)
 	{
 		item = pData[i];
-		/* Move elements of arr[0..i-1], that are
-		greater than key, to one position ahead
-		of their current position */
 		for(j=i-1; j>=0; j--)
 		{
 			if(pData[j]>item)
@@ -137,24 +123,13 @@ void insertionSort(int* pData, int n)
 // extraMemoryAllocated counts bytes of extra memory allocated
 void bubbleSort(int* pData, int n)
 {
-	// int temp;
-	// for (int i=0; i < n; i++) {
-	// 	for (int j=0; j < (n-i-1); j++){
-	// 		if (pData[j] > pData[j+1]) {
-	// 			temp = pData[j];
-	// 			pData[j] = pData[j+1];
-	// 			pData[j+1] = temp;
-	// 		}
-	// 	}
-	// }
-
 	int i, j,temp;
 	for (i = 0; i < n-1; i++)
 	{
 		for (j = 0; j < n-i-1; j++)
 		{
 			if (pData[j] > pData[j+1])
-			{//then swap
+			{
 				temp=pData[j];
 				pData[j]=pData[j+1];
 				pData[j+1]=temp;
@@ -167,33 +142,6 @@ void bubbleSort(int* pData, int n)
 // extraMemoryAllocated counts bytes of extra memory allocated
 void selectionSort(int* pData, int n)
 {
-	// int startIdx = 0;
-	// while (startIdx < n) {
-	// 	int minIdx = startIdx;
-	// 	for (int i = startIdx; i < n; i++){
-	// 		if (pData[i] < pData[minIdx])
-	// 			minIdx = i;
-	// 	}
-	// 	if (startIdx != minIdx) {
-	// 		int temp = pData[startIdx];
-	// 		pData[startIdx] = pData[minIdx];
-	// 		pData[minIdx] = temp;
-	// 	}
-	// 	startIdx++;
-	// }
-
-	// int i, j, min_idx, temp;
-	// for (i = 0; i < n-1; i++)
-	// {
-	// 	printf("\nIteration# %d\n",i+1);
-	// 	min_idx = i;
-	// 	for (j = i+1; j < n; j++)
-	// 		if (pData[j] < pData[min_idx])
-	// 			min_idx = j;
-	// 	temp = pData[i];
-	// 	pData[i] = pData[min_idx];
-	// 	pData[min_idx] = temp;
-	// }
 	for (int i = 0; i < n - 1; i++) {
 		int minIndex = i;
 		for (int j = i + 1; j < n; j++) {
