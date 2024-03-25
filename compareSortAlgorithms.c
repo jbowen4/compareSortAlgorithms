@@ -104,15 +104,32 @@ void mergeSort(int pData[], int l, int r)
 // extraMemoryAllocated counts bytes of memory allocated
 void insertionSort(int* pData, int n)
 {
-	int temp;
-	for (int i = 1; i < n; i++) {
-		for (int j = i; j < 1; j--) {
-			if (pData[j] < pData[j-1]) {
-				temp = pData[i];
-				pData[i] = pData[i+1];
-				pData[i+1] = temp;
-			}
+	// int temp;
+	// for (int i = 1; i < n; i++) {
+	// 	for (int j = i; j < 1; j--) {
+	// 		if (pData[j] < pData[j-1]) {
+	// 			temp = pData[i];
+	// 			pData[i] = pData[i+1];
+	// 			pData[i+1] = temp;
+	// 		}
+	// 	}
+	// }
+
+	int i, item, j;
+	for (i = 1; i < n; i++)
+	{
+		item = pData[i];
+		/* Move elements of arr[0..i-1], that are
+		greater than key, to one position ahead
+		of their current position */
+		for(j=i-1; j>=0; j--)
+		{
+			if(pData[j]>item)
+				pData[j+1] = pData[j];
+			else
+				break;
 		}
+		pData[j+1] = item;
 	}
 }
 
@@ -120,13 +137,27 @@ void insertionSort(int* pData, int n)
 // extraMemoryAllocated counts bytes of extra memory allocated
 void bubbleSort(int* pData, int n)
 {
-	int temp;
-	for (int i=0; i < n; i++) {
-		for (int j=0; j < (n-i-1); j++){
-			if (pData[j] > pData[j+1]) {
-				temp = pData[j];
-				pData[j] = pData[j+1];
-				pData[j+1] = temp;
+	// int temp;
+	// for (int i=0; i < n; i++) {
+	// 	for (int j=0; j < (n-i-1); j++){
+	// 		if (pData[j] > pData[j+1]) {
+	// 			temp = pData[j];
+	// 			pData[j] = pData[j+1];
+	// 			pData[j+1] = temp;
+	// 		}
+	// 	}
+	// }
+
+	int i, j,temp;
+	for (i = 0; i < n-1; i++)
+	{
+		for (j = 0; j < n-i-1; j++)
+		{
+			if (pData[j] > pData[j+1])
+			{//then swap
+				temp=pData[j];
+				pData[j]=pData[j+1];
+				pData[j+1]=temp;
 			}
 		}
 	}
